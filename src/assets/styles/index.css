@@ -1,0 +1,63 @@
+body, html {
+    font-family: 'Helvetica', sans-serif;
+}
+
+
+.Axis path,
+.Axis line {
+  stroke: #E0E0E0;
+}
+
+.Axis text {
+  font-size: 11px;
+  fill: black;
+}
+
+.Axis-Bottom text {
+  transform: rotate(-45deg);
+  text-anchor: end;
+}
+
+.circle {
+    fill: #333;
+  stroke-width: 1.5;
+}
+
+.cirlce--transitioning {
+  fill: none;
+}
+
+.node {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-width: 1.5px;
+  fill: none !important;
+}
+
+/* tooltip */
+.tooltip {
+  position: absolute;
+  color: white;
+  text-align: center;
+  width: 120px;
+  height: 60px;
+  padding: 10px 10px 20px;
+  font: 12px sans-serif;
+  background: whitesmoke;
+  border: 0px;
+  border-radius: 8px;
+  opacity: 1;
+  pointer-events: none;
+  -webkit-transition: all .5s ease;
+  transition: all .5s ease;
+}
+
+.nums {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 60px;
+  color: #e3e3e3;
+}
