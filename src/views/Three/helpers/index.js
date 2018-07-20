@@ -1,21 +1,22 @@
 import * as THREE from 'three';
+// import * as OBJLoader from 'three-obj-loader-es6';
+// import * as MTLLoader from 'three-mtl-loader';
 export * from './text';
 export * from './terrain';
 export * from './algo';
 export * from './primitives';
 
-function loadTexture (textureUrl){
-  // 1st fn is the success cb, 2nd is error
-  let texture = THREE.ImageUtils.loadTexture(textureUrl, null,
-    (res)=>{return null},
-    (err)=>{return null}
-  );
-}
+export function loadModel() {
+  let Loader = new THREE.JSONLoader();
+  Loader.load('https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/TechnicLEGO_CAR_1.mtl', function(materials) {
+      materials.preload();
 
-function loadModel() {
-  // 1st fn is the success cb, 2nd is error
-  let jsonLoader = new THREE.JSONLoader();
- // jsonLoader.load(carModel, (res)=>{console.log(res)}, null)
+      let objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load(' https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/TechnicLEGO_CAR_1.obj', function(obj) {
+          this.scene.add(obj)
+      })
+  });
 }
 
 export function createKeyBoardControls() {
