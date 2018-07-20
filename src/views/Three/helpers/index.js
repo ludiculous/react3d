@@ -1,21 +1,21 @@
 import * as THREE from 'three';
-// import * as OBJLoader from 'three-obj-loader-es6';
-// import * as MTLLoader from 'three-mtl-loader';
-export * from './text';
 export * from './terrain';
 export * from './algo';
 export * from './primitives';
+export * from './particles';
 
 export function loadModel() {
-  let Loader = new THREE.JSONLoader();
-  Loader.load('https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/TechnicLEGO_CAR_1.mtl', function(materials) {
-      materials.preload();
+  let Loader = new THREE.ObjectLoader()
+  let self = this;
 
-      let objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load(' https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/TechnicLEGO_CAR_1.obj', function(obj) {
-          this.scene.add(obj)
-      })
+  Loader.load('https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/TechnicLEGO_CAR_1.json', function(geo) {
+    let Material = new THREE.MeshBasicMaterial({
+      color: 0xffff00
+    });
+    console.log(geo);
+    let group = new THREE.Group();
+    group.add(geo);
+    self.scene.add(group);
   });
 }
 

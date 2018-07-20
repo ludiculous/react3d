@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
-import {createKeyBoardControls, createLight, renderSphere, createParametric, renderSpline } from './helpers';
+import {createKeyBoardControls, createLight,  } from './helpers';
 
 
 class Three extends Component {
@@ -38,8 +38,6 @@ class Three extends Component {
   componentDidMount() {
     this.createContext();
     this.createGridHelper();
-    renderSpline.call(this);
-    createParametric.call(this);
     this.start();
     console.log(this.scene)
   }
