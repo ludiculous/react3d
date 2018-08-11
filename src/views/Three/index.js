@@ -1,13 +1,27 @@
 import React, { Component } from 'react'
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
-import {createKeyBoardControls, createLight,  } from './helpers';
+import {
+  applyBumpMaterial,
+  createCamera,
+  createOCamera,
+  handleCameraPos,
+  createKeyBoardControls,
+  createLight,
+  generateParticleSystem,
+  stepObj,
+  zoomCamera,
+  loadSkyBox
+} from './helpers';
 
 
 class Three extends Component {
   constructor(props) {
     super(props)
     this.scene = {};
+    this.backgroundMesh = {};
+    this.backgroundScene = {};
+    this.backgroundCamera = {};
     this.camera = {};
     this.light = {};
     this.controls = {};
@@ -16,8 +30,7 @@ class Three extends Component {
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
     this.animate = this.animate.bind(this);
-
-
+    this.mouse = {};
     this.mouseX = 0;
     this.mouseY = 0;
     this.rotationSpeedX = 0;
@@ -28,7 +41,6 @@ class Three extends Component {
     document.addEventListener('mousemove', (e)=>{
       let xhalf = window.innerWidth / 2;
       let yhalf = window.innerHeight / 2;
-       console.log("moving mouse")
 
       this.mouseX = e.offsetX - xhalf;
       this.mouseY = e.offsetY - yhalf;
@@ -38,6 +50,7 @@ class Three extends Component {
   componentDidMount() {
     this.createContext();
     this.createGridHelper();
+    generateParticleSystem.call(this);
     this.start();
     console.log(this.scene)
   }
@@ -66,17 +79,15 @@ class Three extends Component {
     const width = this.mount.clientWidth;
     const height = this.mount.clientHeight;
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+
     const renderer = new THREE.WebGLRenderer()
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setClearColor(0x000000, 1.0);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    // to allow multiple renders
+    renderer.autoClear = false;
 
-    // camera.position.x = 1200;
-    // camera.position.y = 500;
-    camera.position.x = 0;
-    camera.position.z = 4;
-    camera.lookAt(scene.position);
+    createCamera.call(this);
 
     let light = new THREE.DirectionalLight();
     light.position.set(1200, 1200, 1200);
@@ -84,22 +95,19 @@ class Three extends Component {
     this.light = light;
     scene.add(light);
 
+
+    loadSkyBox.call(this);
     this.scene = scene;
-    this.camera = camera;
     this.renderer = renderer;
     this.createGUI();
     this.mount.appendChild(this.renderer.domElement)
   }
 
-  handleCameraPos() {
-    this.camera.position.x += (this.mouseX - this.camera.position.x) * 0.05;
-    this.camera.position.y += (-this.mouseY - this.camera.position.y) * 0.05;
-    this.camera.lookAt(this.scene.position);
-  }
-
   animate() {
     let timer = Date.now() * 0.0001;
-    this.handleCameraPos();
+    handleCameraPos.call(this);
+
+    stepObj.call(this);
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
   }
@@ -107,6 +115,7 @@ class Three extends Component {
   renderScene() {
     //console.log(this.scene)
     window.scene = this.scene;
+    this.renderer.render(this.backgroundScene, this.backgroundCamera);
     this.renderer.render(this.scene, this.camera);
   }
 
