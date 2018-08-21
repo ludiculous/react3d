@@ -63,7 +63,7 @@ class Three extends Component {
     this.createContext();
     create_ambientLight.call(this);
     createOrbitCamera.call(this);
-
+    create_areaLight.call(this);
     // How far you can dolly in and out ( PerspectiveCamera only )
     this.createGridHelper();
     loadSkyBox.call(this);

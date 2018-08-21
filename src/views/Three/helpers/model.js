@@ -55,12 +55,35 @@ OBJLoader(THREE);
 // }
 
 export function loadRocks() {
-    let loader = new THREE.ObjectLoader()
-    loader.load( 'https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/TechnicLEGO_CAR_1.json', (geometry, materials)=>{
-        console.log("geometry", geometry)
-        console.log("materials", materials)
+    //let loader = new THREE.ObjectLoader()
+    this.THREE = THREE;
+    let self = this;
+    let mtlloader = new MTLLoader();
+    let objloader = new this.THREE.OBJLoader()
+    console.log(objloader)
+    // let objloader = new this.THREE.OBJLoader()
+    //
+
+    mtlloader.load('https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/Rock1.mtl', (mtl)=>{
+        mtl.preload();
+
+        console.log(mtl);
+        let rockMaterial = mtl.materials.Material
+
+
+        //objloader.materials = rockMaterial
+        objloader.load( 'https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/Rock1.obj', (obj)=>{
+            console.log(obj)
+            let rockGeo = obj.children[1].geometry;
+            let rockMtl = new THREE.MeshPhongMaterial( { ambient: 0x555555, color: 0x555555, specular: 0xffffff, shininess: 50, shading: THREE.SmoothShading } );
+
+
+            self.scene.add(obj);
+        });
 
     });
+
+
 
     // let loader2 = new THREE.JSONLoader();
     // loader2.load(rock1cpyjson, (geometry, materials)=>{
