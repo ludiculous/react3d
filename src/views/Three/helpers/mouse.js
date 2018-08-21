@@ -1,7 +1,5 @@
 import * as THREE from 'three';
 
-
-
 export function createRaycaster() {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();

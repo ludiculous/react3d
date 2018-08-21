@@ -9,21 +9,11 @@ export * from './audio';
 export * from './mouse';
 export * from './material';
 export * from './environment';
-
-export function loadModel() {
-  let Loader = new THREE.ObjectLoader()
-  let self = this;
-
-  Loader.load('https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/TechnicLEGO_CAR_1.json', function(geo) {
-    let Material = new THREE.MeshBasicMaterial({
-      color: 0xffff00
-    });
-    console.log(geo);
-    let group = new THREE.Group();
-    group.add(geo);
-    self.scene.add(group);
-  });
-}
+export * from './controls';
+export * from './animations';
+export * from './lights';
+export * from './model';
+export * from './flowmap';
 
 export function createKeyBoardControls() {
 

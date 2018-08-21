@@ -1,4 +1,25 @@
 import * as THREE from 'three';
+import * as OrbitControls from 'three-orbitcontrols';
+
+export function createOrbitCamera() {
+    let Orbitcontrol = new OrbitControls(this.camera, this.renderer.domElement);
+    Orbitcontrol.minPolarAngle = 0;
+    Orbitcontrol.maxPolarAngle = Math.PI;
+    Orbitcontrol.minDistance = 0;
+    Orbitcontrol.maxDistance = Infinity;
+    Orbitcontrol.enableZoom = true;
+    OrbitControls.zoomSpeed = 1.0;
+}
+
+export function pointToCamera() {
+     document.addEventListener('mousemove', (e)=>{
+      let xhalf = window.innerWidth / 2;
+      let yhalf = window.innerHeight / 2;
+
+      this.mouseX = e.offsetX - xhalf;
+      this.mouseY = e.offsetY - yhalf;
+    });
+}
 
 export function createCamera(){
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);

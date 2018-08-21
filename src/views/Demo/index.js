@@ -17,7 +17,19 @@ class Demo extends Component {
 
     render() {
         return (
-            <TextTransition />
+            <svg width="100" height="100">
+                <path d=" M 10 25
+                          V 100
+                          H 50
+                          V 25
+                          H 10
+                        "
+                        stroke="red"
+                        stroke-width="2"
+                        fill="none"
+                        />
+
+            </svg>
         );
     }
 }

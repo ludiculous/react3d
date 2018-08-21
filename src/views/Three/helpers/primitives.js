@@ -1,5 +1,10 @@
 import * as THREE from 'three';
 
+export function createAxes() {
+  let axes = new THREE.AxisHelper(20);
+  this.scene.add(axes);
+}
+
 export function renderSpline() {
     let numPoints = 100;
     // define how many vertices is used
@@ -16,43 +21,50 @@ export function renderSpline() {
 
 }
 
-export function renderSphere() {
+export function renderSpheres() {
     // width, height, height
-    console.log("rendering sphere")
-    let sphereGeometry = new THREE.SphereGeometry( .3, .3, .3 );
-    // material for non-shiny surfaces
-    let sphereMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffff00
-    })
-    let sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    //sphereMesh.receiveShadow = true;
-    sphereGeometry.verticesNeedUpdate;
-    this.scene.add(sphereMesh)
-    sphereMesh.position.set(0,0,1)
+    for(let i =0; i < 99; i++) {
+      let sphereSize = Math.ceil((Math.random() * 2));
+      let sphereGeometry = new THREE.SphereGeometry( sphereSize, 32, 32 );
+      sphereGeometry.heightSegments = false;
+      // material for non-shiny surfaces
+      // let sphereMaterial = new THREE.MeshBasicMaterial({
+      //   color: 0xffff00
+      // })
+      //let sphereMaterial = new THREE.MeshDepthMaterial();
+      let sphereMaterial = new THREE.MeshPhongMaterial({
+        color: 0x7777ff,
+        emissive: 0x000000
+      });
+      sphereMaterial.shininess = 15;
+      sphereMaterial.metal = true;
+      let sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      //sphereMesh.children[1].scale.set(0.99, 0.99, 0.99);
+      //sphereMesh.receiveShadow = true;
 
-    console.log(sphereMesh)
-    this.objects.push(sphereMesh)
-}
-
-export function renderCube() {
-    let colors = ['#F85359'];
-    const geometry = new THREE.BoxGeometry(.3,.3,.3)
-
-    for(let i =0; i< colors.length; i++) {
-      let material = new THREE.MeshBasicMaterial({ color: colors[i] })
-      let cube = new THREE.Mesh(geometry, material)
-
-      this.scene.add(cube)
-      cube.position.set(0 + i,1,1)
-      console.log(cube);
-      this.objects.push(cube)
+      this.scene.add(sphereMesh)
+      //sphereMesh.position.set(40,40,40)
+      sphereMesh.position.set(0, (Math.random() * 20), (Math.random() * 20));
+      this.spheres.push(sphereMesh)
     }
-    console.log(this.objects)
-    //this.cube = cube
 }
 
-export function createLight() {
+export function renderCubes() {
+    let shapeTrans = Math.round((Math.random() * 20));
 
+      for(let i =0; i < 99; i++) {
+      let cubeSize = Math.ceil((Math.random() * 3));
+      const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+      let material =new THREE.MeshLambertMaterial({color:0x2194ce});
+      let cube = new THREE.Mesh(geometry, material);
+
+      this.scene.add(cube);
+
+      cube.position.set(cubeSize + Math.random() * 20, Math.random() * 20, Math.random() * 20);
+      this.objects.push(cube)
+      }
+
+    //this.cube = cube
 }
 
 export function mergeGeometry() {
