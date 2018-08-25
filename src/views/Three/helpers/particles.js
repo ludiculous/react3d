@@ -1,6 +1,129 @@
 import * as THREE from 'three';
-import particlepng from '../../../assets/3d/particle.png';
-import lotusparticle from '../../../assets/3d/lotus_particle.jpg';
+import particlepng from 'assets/3d/particle.png';
+import lotusparticle from 'assets/3d/lotus_particle.jpg';
+import particle2 from 'assets/textures/particle2.png';
+import perlin from 'assets/textures/perlin-512.png';
+import {GPUParticleSystem} from  '../sources/objects/GPUParticleSystem.js';
+
+export function createStarSystem() {
+    let loader = new THREE.TextureLoader();
+    let self = this;
+
+    loader.load(particle2, (texture) =>{
+        starSystemHelper(self, texture)
+    });
+
+}
+
+function starSystemHelper(self, texture) {
+
+    let starMaterial = new THREE.PointsMaterial({
+        map: texture,
+        color: 0xaa88ff
+    });
+
+    starMaterial.blending = THREE.AdditiveBlending;
+    starMaterial.transparent = true;
+    // the parent container
+    let starGeometry = new THREE.Geometry();
+
+    for ( let i = 0; i < 1000; i ++ ) {
+
+        let star = new THREE.Vector3();
+        star.x = THREE.Math.randFloatSpread( 200 );
+        star.y = THREE.Math.randFloatSpread( 300 );
+        star.z = THREE.Math.randFloatSpread( 100 );
+
+        starGeometry.vertices.push( star );
+
+    }
+
+    let starField = new THREE.Points( starGeometry, starMaterial );
+    self.starField = starField;
+    self.scene.add( self.starField );
+}
+
+export function animateStarSystem() {
+    let delta = this.clock.getDelta() * 1;
+    this.tick += delta;
+    if ( this.tick < 0 ) this.tick = 0;
+
+
+    console.log(delta);
+    if ( delta > 0 ) {
+        console.log(this.xOffset);
+        for ( let i = 0; i < 1000;  i++ ) {
+        let x = Math.sin( this.tick * 1.5 + (i * this.xOffset)) * 20  ;
+        let y = Math.cos( this.tick * 1.33 + (i * this.yOffset)) * 10 ;
+        let z = Math.sin( this.tick * 1.5 + (1.33 * i)) * 5;
+        this.starField.geometry.vertices[i].x = x;
+        this.starField.geometry.vertices[i].y = y;
+        this.starField.geometry.vertices[i].z = z;
+        this.starField.geometry.verticesNeedUpdate = true;
+        // if(i < 10) {
+        //     console.log(this.starField.geometry.vertices[i])
+        // }
+
+        //this.starField.translate(x, y, z);
+            // Yep, that's really it.   Spawning particles is super cheap, and once you spawn them, the rest of
+            // their lifecycle is handled entirely on the GPU, driven by a time uniform updated below
+        }
+    }
+
+}
+
+// export function createGPUParticles() {
+
+//     this.particleSystem = new GPUParticleSystem( {
+//         maxParticles: 250000
+//     });
+
+//     this.scene.add(this.particleSystem)
+
+//     this.options = {
+//         position: new THREE.Vector3(),
+//         positionRandomness: .3,
+//         velocity: new THREE.Vector3(),
+//         velocityRandomness: .5,
+//         color: 0xaa88ff,
+//         colorRandomness: .2,
+//         turbulence: .5,
+//         lifetime: 2,
+//         size: 5,
+//         sizeRandomness: 1
+//     };
+
+//     this.spawnerOptions = {
+//         spawnRate: 15000,
+//         horizontalSpeed: 1.5,
+//         verticalSpeed: 1.33,
+//         timeScale: 1
+//     };
+// }
+
+// export function spawnGPUParticles() {
+//     let delta = this.clock.getDelta() * this.spawnerOptions.timeScale;
+//     this.tick += delta;
+//     if ( this.tick < 0 ) this.tick = 0;
+
+//     if ( delta > 0 ) {
+
+//         this.options.position.x = Math.sin( this.tick * this.spawnerOptions.horizontalSpeed ) * 20;
+//         this.options.position.y = Math.sin( this.tick * this.spawnerOptions.verticalSpeed ) * 10;
+//         this.options.position.z = Math.sin( this.tick * this.spawnerOptions.horizontalSpeed + this.spawnerOptions.verticalSpeed ) * 5;
+
+//         for ( let x = 0; x < this.spawnerOptions.spawnRate * delta; x++ ) {
+//             // Yep, that's really it.   Spawning particles is super cheap, and once you spawn them, the rest of
+//             // their lifecycle is handled entirely on the GPU, driven by a time uniform updated below
+
+//             this.particleSystem.spawnParticle( this.options );
+//         }
+
+//     }
+
+//     this.particleSystem.update( this.tick );
+
+// }
 
 export function generateParticleSystem() {
     let particleSystems = [
@@ -38,7 +161,8 @@ function generateParticleSystemHelper(self, ps, i) {
 
     psMaterial.map = loader.load(imgsrc, function(texture) {
         let material = new THREE.MeshBasicMaterial({
-            map: texture
+            map: texture,
+
         });
         return material;
     });
@@ -113,20 +237,20 @@ function playSound(buffer, sourceNode) {
 
 function updateCubes() {
 // get the average for the first channel
-    var array0= new Uint8Array(this.analyser0.frequencyBinCount);
+    let array0= new Uint8Array(this.analyser0.frequencyBinCount);
     this.analyser0.getByteFrequencyData(array0);
-    var average0 = getAverageVolume(array0);
+    let average0 = getAverageVolume(array0);
     // get the average for the second channel
-    var array1 = new Uint8Array(this.analyser1.frequencyBinCount);
+    let array1 = new Uint8Array(this.analyser1.frequencyBinCount);
     // getByteFrequency scales the cube according to its volume
 
     this.analyser1.getByteFrequencyData(array1);
     // this value is used to scale the objects along the y axis
-    var average1 = getAverageVolume(array1);
+    let average1 = getAverageVolume(array1);
     // clear the current state
     if (this.scene.getObjectByName('cube0')) {
-        var cube0 = this.scene.getObjectByName('cube0');
-        var cube1 = this.scene.getObjectByName('cube1');
+        let cube0 = this.scene.getObjectByName('cube0');
+        let cube1 = this.scene.getObjectByName('cube1');
         cube0.scale.y = average0 / 20;
         cube1.scale.y = average1 / 20;
     }
@@ -178,7 +302,7 @@ function updateWaves() {
 
     let geo = new THREE.Geometry();
 
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         let v = new THREE.Vector3(1, array[i] / 8, (i/15));
         geo.vertices.push(v);
     }

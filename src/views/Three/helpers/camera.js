@@ -1,5 +1,15 @@
 import * as THREE from 'three';
 import * as OrbitControls from 'three-orbitcontrols';
+import {TrackballControls} from 'three-full';
+
+export function createTrackBallCamera() {
+    this.controls = new TrackballControls( this.camera, this.renderer.domElement );
+    this.controls.rotateSpeed = 5.0;
+    this.controls.zoomSpeed = 2.2;
+    this.controls.panSpeed = 1;
+    this.controls.dynamicDampingFactor = 0.3;
+
+}
 
 export function createOrbitCamera() {
     let Orbitcontrol = new OrbitControls(this.camera, this.renderer.domElement);
