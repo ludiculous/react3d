@@ -16,5 +16,15 @@ export function orbit() {
               Math.sin(this.date + i) * orbitRadius
             );
     }
+}
 
+export function satellite(object) {
+
+  //this.a += this.da  % 10;
+  this.date = Date.now() * 0.0001;
+
+  //console.log(this.a)
+  object.position.x = this.r* Math.sin(this.date);
+  object.position.z = this.r* Math.cos(this.date);
+  object.rotation.y = this.r* Math.sin(Date.now() * 0.00000001);
 }

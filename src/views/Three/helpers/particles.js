@@ -5,6 +5,19 @@ import particle2 from 'assets/textures/particle2.png';
 import perlin from 'assets/textures/perlin-512.png';
 import {GPUParticleSystem} from  '../sources/objects/GPUParticleSystem.js';
 
+
+    // this.clock = new THREE.Clock();
+    // this.tick = 0;
+    // this.options = {};
+    // this.spawnerOptions = {};
+    // this.particleSystem = {};
+    // this.engine;
+    // this.starfield = {};
+    // this.xOffset = Math.floor(Math.random() * Math.floor(20));
+    // this.yOffset = Math.floor(Math.random() * Math.floor(20));
+    // this.zOffset = Math.floor(Math.random() * Math.floor(20));
+
+
 export function createStarSystem() {
     let loader = new THREE.TextureLoader();
     let self = this;

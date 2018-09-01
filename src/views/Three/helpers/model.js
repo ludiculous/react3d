@@ -1,53 +1,144 @@
 import * as THREE from 'three';
-
-import rock1obj from 'assets/3d/rock1/rock1.obj';
-import rock1mtl from 'assets/3d/rock1/rock1.mtl';
-import rocktexture from 'assets/3d/rock1/rock1_ao.png'
-
-import craterobj from 'assets/3d/Models/crater.obj';
-import cratermtl from 'assets/3d/Models/crater.mtl';
-
-import bikeMtl from 'assets/3d/BSA_BantamD1_OBJ/BSA_BantamD1_OBJ.mtl';
-import bike from 'assets/3d/BSA_BantamD1_OBJ/BSA_BantamD1_OBJ.obj';
-import {OBJLoader} from 'three-full';
+import {OBJLoader2} from 'three-full';
 import {MTLLoader} from 'three-full';
 
-export function loadRocks() {
-    //let loader = new THREE.ObjectLoader()
+const MaterialLoader = MTLLoader;
+const ObjectLoader = OBJLoader2;
+
+export function initAssetLoader() {
+
     let self = this;
+    let assetList = [
+        {
+            material: 'alien.mtl',
+            object: 'alienBones.obj'
+        },
+        {
+            material: 'meteorHalf.mtl',
+            object: 'meteorHalf.obj'
+        },
+        {
+            material: 'rocksTall.mtl',
+            object: 'rocksTall.obj'
+        },
+        {
+            material: 'spaceCraft1.mtl',
+            object: 'spaceCraft1.obj'
+        },
+        {
+            material: 'spaceCraft6.mtl',
+            object: 'spaceCraft6.obj'
+        },
+        {
+            material: 'rocks.mtl',
+            object: 'rocks.obj'
+        }
+    ]
 
-    console.log(rock1obj)
-    let mtlloader = new MTLLoader()
-        .load('assets/3d/Models/crater.mtl', (cratermtl)=>{
-        cratermtl.preload();
-        //console.log(mtl.materials.None)
-        console.log(cratermtl)
-        //let rockMat = mtl.materials.None;
-        //rockMat.map = rockTexture;
+    let rootUrl = 'https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/Models/'
 
-        let objLoader = new OBJLoader();
-                objLoader.setMaterials('assets/3d/Models/crater.obj');
-                objLoader.load(craterobj, function(object){
-                   // let rockObj = object.detail.loaderRootNode;
-                    self.scene.add(object);
-                    console.log(object)
-                    //console.log(rockObj)
-                });
-        // let objloader =  new OBJLoader2().load(rock1obj,(obj)=>{
-        //     console.log(obj.detail.loaderRootNode);
-        //     let rockGeo = obj.detail.loaderRootNode.children[0].geometry;
-        //     let rock = new THREE.Mesh(rockGeo, rockMat);
-
-        //     self.scene.add(rock);
-        // });
+    assetList.forEach((entity,i)=>{
+        let coordinates = createCoordinates(i);
+        let objUrl = rootUrl + entity.object;
+        loadAssets(self, objUrl , entity.material, rootUrl, rootUrl, 'space_objects', coordinates);
     });
-        //objloader.materials = rockMaterial
-        //this.scene.add(objloader);
+}
 
-    // let objloader = new this.THREE.OBJLoader()
-    // let loader2 = new THREE.JSONLoader();
-    // loader2.load(rock1cpyjson, (geometry, materials)=>{
-    //     console.log("geometry", geometry)
-    //     console.log("materials", materials)
-    // })
+function createCoordinates(index) {
+    let max = 300;
+    let x = Math.floor(Math.random() * Math.floor(max)) + index;
+    let y = Math.floor(Math.random() * Math.floor(max)) + index;
+    let z = Math.floor(Math.random() * Math.floor(max)) + index;
+    return {
+        x,y,z
+    }
+}
+
+function loadAssets(self, objUrl,  mtlUrl, mtlRoot, textureRoot, objectList, coordinates) {
+    let MTLLoader = new MaterialLoader();
+
+    MTLLoader
+        .setMaterialOptions({
+            wrap:  THREE.RepeatWrapping
+        })
+        .setCrossOrigin("")
+        .setTexturePath(textureRoot)
+        .setPath(mtlRoot)
+        .load(mtlUrl, (mtl)=>{
+            mtl.preload();
+
+            let objLoader = new ObjectLoader();
+            objLoader.setMaterials(mtl.materials);
+            objLoader.load(objUrl, function(object){
+
+            let customObj = object.detail.loaderRootNode;
+            customObj.position.set(coordinates.x, coordinates.y, coordinates.z);
+
+
+            self[`${objectList}`].push(customObj);
+            self.scene.add(customObj);
+        });
+    });
+}
+
+export function generateGroundTile() {
+    let self = this;
+    let boundaries = 10;
+
+    let rootUrl = 'https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/Models/';
+    let materialUrl = 'groundTile.mtl';
+    let objectUrl = rootUrl + 'groundTile.obj';
+
+    let MTLLoader = new MaterialLoader();
+
+    MTLLoader
+        .setMaterialOptions({
+            wrap:  THREE.RepeatWrapping
+        })
+        .setCrossOrigin("")
+        .setTexturePath(rootUrl)
+        .setPath(rootUrl)
+        .load(materialUrl, (mtl)=>{
+            mtl.preload();
+
+            let objLoader = new ObjectLoader()
+
+            objLoader.setMaterials(mtl.materials)
+            objLoader.load(objectUrl, function(object){
+
+            let customObj = object.detail.loaderRootNode;
+            customObj.position.set(0, 0, 0);
+
+
+
+            for(let i=0; i < boundaries; i++) {
+                for(let j=0; j< boundaries; j++) {
+
+                    let floorTile = customObj.clone();
+                    floorTile.position.x = i * 12;
+                    floorTile.position.z = j * 12;
+                    console.log(floorTile.position.x, floorTile.position.y);
+                    self[`floor_tiles`].push(floorTile);
+                    self.scene.add(floorTile);
+                }
+            }
+
+            // self[`floor_tiles`].push(customObj);
+            // self.scene.add(customObj);
+        });
+    });
+    // clone the object with a 2D vector
+}
+
+
+export function scaleObject(object, scale) {
+    object.scale.x = scale;
+    object.scale.y = scale;
+    object.scale.z = scale;
+}
+
+export function translateObject(object, coordinates) {
+    object.position.x = coordinates.x;
+    object.position.y = coordinates.y;
+    object.position.y = coordinates.z;
 }

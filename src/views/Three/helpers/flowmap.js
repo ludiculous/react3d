@@ -8,6 +8,18 @@ import FloorChecker from 'assets/textures/FloorsCheckerboard_S_Diffuse.jpg';
 import {vertex_shader} from './water_vertex.js';
 import {fragment_shader} from './water_fragment.js';
 
+// this.water = {};
+// this.customUniforms = {};
+
+export function animateFlowMap() {
+    let delta = this.clock.getDelta();
+
+    if(this.customUniforms.hasOwnProperty("time")) {
+      console.log(this.customUniforms)
+      this.customUniforms.time.value += delta;
+    }
+}
+
 
 export function createCustomShader() {
     console.log(vertex_shader);

@@ -1,5 +1,11 @@
 import * as THREE from 'three';
 
+export function createGrid() {
+    let helper = new THREE.GridHelper( 1000, 40, 0x303030, 0x303030 );
+    helper.position.y = - 75;
+    this.scene.add( helper );
+}
+
 export function createAxes() {
   let axes = new THREE.AxisHelper(20);
   this.scene.add(axes);
@@ -19,6 +25,19 @@ export function renderSpline() {
     let tubeMesh = new THREE.Mesh(tubeGeo, tubeMaterial);
     this.scene.add(tubeMesh);
 
+}
+
+export function generateRandomSpheres () {
+    for(let i =0; i < 100; i++) {
+        let mesh = new THREE.Mesh( geometry, material );
+        let geometry = new THREE.SphereBufferGeometry( 1, 4, 4 );
+        let material = new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
+        mesh.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 ).normalize();
+        mesh.position.multiplyScalar( Math.random() * 400 );
+        mesh.rotation.set( Math.random() * 2, Math.random() * 2, Math.random() * 2 );
+        mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 50;
+        this.object_wrapper.add( mesh );
+    }
 }
 
 export function renderSpheres() {

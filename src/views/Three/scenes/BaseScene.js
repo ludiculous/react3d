@@ -1,64 +1,33 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
 import {
-    createCamera,
     create_ambientLight,
     createOrbitCamera,
-    createGrid,
-    initAssetLoader,
-    generateGroundTile,
-    createLightShadow,
-    generateRandomSpheres,
-    createPostProcessing,
-    startRaycaster
-
-} from './helpers';
+    createGrid
+} from '../../helpers';
 
 
-class Three extends Component {
+class BaseScene extends Component {
     constructor(props) {
         super(props);
-
         this.scene = {};
         this.renderer = {};
-        this.composer = {};
         this.camera = {};
         this.lights = {};
-        this.clock = new THREE.Clock();
-        this.bubbles = [];
         this.objects = [];
-
-
+        //functions for renderer loop
         this.start = this.start.bind(this);
         this.stop = this.stop.bind(this);
         this.animate = this.animate.bind(this);
-
-        // raycaster
-        this.selected_object = {};
-        this.raycaster = {};
-        this.mouseVector = {};
-
-        this.space_objects = [];
-        this.floor_tiles = [];
-        this.object_wrapper = new THREE.Group();
     }
 
     componentDidMount() {
         this.createContext();
 
-        createLightShadow.call(this);
         create_ambientLight.call(this);
         createOrbitCamera.call(this);
         createGrid.call(this);
-        generateRandomSpheres.call(this);
-        startRaycaster.call(this);
-        //generateGroundTile.call(this)
-        //initAssetLoader.call(this);
         //loadSkyBox.call(this);
-
-        createPostProcessing.call(this);
-        window.space_objects = this.space_objects;
-        window.floor_tiles = this.floor_tiles;
         this.start();
         console.log(this.scene)
         console.log(this.objects)
@@ -94,27 +63,22 @@ class Three extends Component {
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setClearColor(0x000000, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
-        //renderer.autoClear = false;
+        renderer.autoClear = false;
 
         createCamera.call(this);
+        this.camera.position.z = 500;
         this.scene = scene;
         this.renderer = renderer;
         this.mount.appendChild(this.renderer.domElement);
     }
 
     animate() {
-        let delta = this.clock.getDelta();
-
-        this.composer.render();
-        //this.renderScene();
+        this.renderScene();
         this.frameId = window.requestAnimationFrame(this.animate);
-
-        console.log(this.composer)
     }
 
     renderScene() {
-
-        //this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.scene, this.camera);
     }
 
     render() {
@@ -127,4 +91,4 @@ class Three extends Component {
     }
 }
 
-export default Three;
+export default BaseScene;

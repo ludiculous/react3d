@@ -23,3 +23,33 @@ export function create_areaLight() {
     let rectLightHelper = new THREE.RectAreaLightHelper( rectLight );
     this.scene.add( rectLightHelper );
 }
+
+export function createLightShadow() {
+    const SHADOW_MAP_WIDTH = window.innerWidth / 2;
+    const SHADOW_MAP_HEIGHT = window.innerHeight / 2;
+
+    this.renderer.shadowMapEnabled = true;
+    this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
+
+    let root = new THREE.Object3D;
+    // color, intensity
+    let directionalLight = new THREE.DirectionalLight( 0xffffff, 1);
+    let spotLight = new THREE.SpotLight(0xffffff)
+
+
+    root.add(spotLight);
+    root.add(directionalLight);
+
+    spotLight.castShadow = true;
+    spotLight.shadowCameraNear = 1;
+    spotLight.shadowCameraFar = 200;
+    spotLight.shadowCameraFov = 45;
+    spotLight.shadowDarkness = 0.5;
+    spotLight.shadowMapWidth = SHADOW_MAP_WIDTH;
+    spotLight.shadowMapHeight = SHADOW_MAP_HEIGHT;
+
+    let ambientLight = new THREE.AmbientLight(0x888888);
+    root.add(ambientLight)
+
+    this.scene.add(root);
+}

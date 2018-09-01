@@ -35,7 +35,7 @@ export function createCamera(){
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
     camera.position.x = 0;
     camera.position.z = 4;
-    if(this.objects.length > 0) camera.lookAt(this.objects[0].position);
+    //if(this.objects.length > 0) camera.lookAt(this.objects[0].position);
 
     this.camera = camera;
 }

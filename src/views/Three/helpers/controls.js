@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import * as dat from 'dat.gui';
 // pointerlockchange.bind(this)
 
     // document.addEventListener( 'pointerlockchange', pointerlockchange, false );
@@ -8,6 +8,16 @@ import * as THREE from 'three';
     // document.addEventListener( 'pointerlockerror', pointerlockerror, false );
     // document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
     // document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+export function createGUI() {
+    let self = this;
+    let gui = new dat.GUI();
+    gui.add(this, 'rotationSpeedX', -0.2, 0.2)
+    gui.add(this, 'rotationSpeedY', -0.2, 0.2)
+    gui.add(this, 'rotationSpeedZ', -0.2, 0.2)
+}
+
+
 export function createPointLockControls() {
     this.camera.rotation.set( 0, 0, 0 );
     this.controls = new PointerLockControls(this.camera);
