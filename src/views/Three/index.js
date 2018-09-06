@@ -109,7 +109,7 @@ class Three extends Component {
         //this.renderScene();
         this.frameId = window.requestAnimationFrame(this.animate);
 
-        console.log(this.composer)
+
     }
 
     renderScene() {
