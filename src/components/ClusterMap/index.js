@@ -38,6 +38,7 @@ class ClusterMap extends Component {
         let g = context.append('g')
             .attr('transform', `translate("${this.ele_diameter /2}, ${this.ele_diameter /2}")`);
 
+        let color = d3.scaleLinear()
     }
 
     render() {

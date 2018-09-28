@@ -142,3 +142,37 @@ export function translateObject(object, coordinates) {
     object.position.y = coordinates.y;
     object.position.y = coordinates.z;
 }
+
+export function loadAsteroid() {
+    let self = this;
+    let boundaries = 10;
+
+    let rootUrl = 'https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/asteroid/source/6502a8d4533a44fe86503dccb2ebfd13/';
+    let textureRoot = 'https://raw.githubusercontent.com/ludiculous/react3d/master/src/assets/3d/asteroid/textures/';
+    let materialUrl = 'asteroid.mtl';
+    let objectUrl = rootUrl + 'asteroid.obj';
+
+    let MTLLoader = new MaterialLoader();
+
+    MTLLoader
+        .setMaterialOptions({
+            wrap:  THREE.RepeatWrapping
+        })
+        .setCrossOrigin("")
+
+        .setPath(rootUrl)
+        .load(materialUrl, (mtl)=>{
+            mtl.preload();
+
+            let objLoader = new ObjectLoader()
+
+            objLoader.setMaterials(mtl.materials)
+            objLoader.load(objectUrl, function(object){
+
+            let customObj = object.detail.loaderRootNode;
+            customObj.position.set(0, 0, 0);
+            customObj.scale.set(.5, .5, .5)
+            self.scene.add(customObj);
+        });
+    });
+}

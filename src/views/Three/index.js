@@ -10,8 +10,8 @@ import {
     createLightShadow,
     generateRandomSpheres,
     createPostProcessing,
-    startRaycaster
-
+    startRaycaster,
+    loadAsteroid
 } from './helpers';
 
 
@@ -51,12 +51,13 @@ class Three extends Component {
         createOrbitCamera.call(this);
         createGrid.call(this);
         generateRandomSpheres.call(this);
+        loadAsteroid.call(this);
         startRaycaster.call(this);
         //generateGroundTile.call(this)
         //initAssetLoader.call(this);
         //loadSkyBox.call(this);
 
-        createPostProcessing.call(this);
+        //createPostProcessing.call(this);
         window.space_objects = this.space_objects;
         window.floor_tiles = this.floor_tiles;
         this.start();
@@ -97,6 +98,7 @@ class Three extends Component {
         //renderer.autoClear = false;
 
         createCamera.call(this);
+        //this.camera.position.z = 1000
         this.scene = scene;
         this.renderer = renderer;
         this.mount.appendChild(this.renderer.domElement);
@@ -105,8 +107,8 @@ class Three extends Component {
     animate() {
         let delta = this.clock.getDelta();
 
-        this.composer.render();
-        //this.renderScene();
+        //this.composer.render();
+        this.renderScene();
         this.frameId = window.requestAnimationFrame(this.animate);
 
 
@@ -114,7 +116,7 @@ class Three extends Component {
 
     renderScene() {
 
-        //this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.scene, this.camera);
     }
 
     render() {
